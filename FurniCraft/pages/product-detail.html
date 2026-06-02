@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - FurniCraft</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #f8fafc;
+        }
+        .detail-shell {
+            padding: 40px 0;
+        }
+        .detail-gallery,
+        .detail-panel,
+        .detail-card {
+            background: white;
+            border: 1px solid rgba(31, 41, 55, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+        .detail-gallery {
+            padding: 24px;
+            position: sticky;
+            top: 90px;
+        }
+        .detail-main-image {
+            width: 100%;
+            height: 520px;
+            object-fit: contain;
+            background: linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
+            border-radius: 10px;
+            padding: 24px;
+        }
+        .detail-panel {
+            padding: 28px;
+        }
+        .detail-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .detail-price {
+            color: var(--primary-color);
+            font-size: 2.4rem;
+            font-weight: 800;
+        }
+        .detail-actions {
+            display: grid;
+            grid-template-columns: 150px 1fr 1fr;
+            gap: 12px;
+        }
+        .qty-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(31, 41, 55, 0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+        .qty-box button {
+            width: 42px;
+            border: none;
+            background: #f1f5f9;
+            font-weight: 800;
+        }
+        .qty-box input {
+            width: 64px;
+            border: none;
+            text-align: center;
+            font-weight: 700;
+        }
+        .detail-card {
+            padding: 24px;
+            height: 100%;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .feature-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            color: #475569;
+        }
+        .feature-list i {
+            color: var(--primary-color);
+            margin-top: 4px;
+        }
+        .spec-table {
+            margin: 0;
+        }
+        .spec-table td {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(31, 41, 55, 0.08);
+        }
+        .spec-table td:first-child {
+            color: #64748b;
+            width: 42%;
+        }
+        .delivery-step {
+            display: grid;
+            grid-template-columns: 46px 1fr;
+            gap: 14px;
+            position: relative;
+            padding-bottom: 24px;
+        }
+        .delivery-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 22px;
+            top: 46px;
+            bottom: 0;
+            width: 2px;
+            background: rgba(99, 102, 241, 0.18);
+        }
+        .delivery-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            z-index: 1;
+        }
+        .related-card {
+            background: white;
+            border: 1px solid rgba(31, 41, 55, 0.08);
+            border-radius: 10px;
+            padding: 14px;
+            height: 100%;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .related-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 30px rgba(99, 102, 241, 0.14);
+        }
+        .related-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+        }
+        .media-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .media-toggle button {
+            transition: all 0.3s ease;
+        }
+        .media-toggle button.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        .product-media {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        @media (max-width: 991px) {
+            .detail-gallery {
+                position: static;
+            }
+            .detail-actions {
+                grid-template-columns: 1fr;
+            }
+            .detail-main-image {
+                height: 360px;
+            }
+        }
+        @media (max-width: 575px) {
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="../index.html"><i class="fas fa-couch me-2"></i>FurniCraft</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+                <div class="ms-3">
+                    <a href="cart.html" class="nav-link position-relative" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="cartCount" style="display:none;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="detail-shell">
+        <div class="container">
+            <div class="mb-4">
+                <a href="../index.html#products" class="text-decoration-none"><i class="fas fa-arrow-left me-2"></i>Back to products</a>
+            </div>
+
+            <div id="missingProduct" class="alert alert-warning d-none">
+                Product not found. Please return to the product catalog.
+            </div>
+
+            <div id="productDetail" class="d-none">
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-6">
+                        <div class="detail-gallery">
+                            <img id="detailImage" class="detail-main-image product-media" src="" alt="">
+                            <p id="angleCaption" class="text-muted small mt-3 mb-2 d-none">Choose a view: front, side, or back.</p>
+                            <div id="angleThumbnails" class="detail-angle-thumbnails mt-2 d-none"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="detail-panel">
+                            <span id="detailCategory" class="detail-badge"></span>
+                            <h1 id="detailName" class="fw-bold mt-3 mb-2"></h1>
+                            <div id="detailRating" class="mb-3"></div>
+                            <p id="detailDescription" class="text-muted fs-5"></p>
+                            <div id="detailPrice" class="detail-price mb-3"></div>
+
+                            <ul class="feature-list mb-4">
+                                <li><i class="fas fa-truck-fast"></i><span>Free doorstep delivery on orders above Rs. 25,000</span></li>
+                                <li><i class="fas fa-shield-halved"></i><span>1 year structural warranty included</span></li>
+                                <li><i class="fas fa-rotate-left"></i><span>30 day easy return and exchange support</span></li>
+                                <li><i class="fas fa-lock"></i><span>Secure checkout with card, wallet, and EMI options</span></li>
+                            </ul>
+
+                            <div class="detail-actions mb-4">
+                                <div class="qty-box">
+                                    <button type="button" onclick="changeQty(-1)">-</button>
+                                    <input id="detailQty" type="number" value="1" min="1" max="10">
+                                    <button type="button" onclick="changeQty(1)">+</button>
+                                </div>
+                                <button class="btn btn-primary fw-bold" onclick="addDetailToCart()">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-outline-primary fw-bold" onclick="buyNow()">
+                                    <i class="fas fa-bag-shopping me-2"></i>Buy Now
+                                </button>
+                            </div>
+
+                            <div class="p-3 rounded bg-light">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-7">
+                                        <label for="pinCode" class="form-label fw-bold mb-1">Check delivery</label>
+                                        <input id="pinCode" class="form-control" placeholder="Enter PIN code">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <button class="btn btn-dark w-100 mt-md-4" onclick="checkDelivery()">Check</button>
+                                    </div>
+                                </div>
+                                <small id="deliveryMessage" class="text-success fw-semibold d-block mt-2">Estimated delivery: 5-7 business days across major Indian cities.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <section class="detail-card">
+                            <h3 class="fw-bold mb-3">Material & Build</h3>
+                            <p id="materialIntro" class="text-muted"></p>
+                            <table class="table spec-table">
+                                <tbody id="specRows"></tbody>
+                            </table>
+                        </section>
+                    </div>
+                    <div class="col-lg-6">
+                        <section class="detail-card">
+                            <h3 class="fw-bold mb-3">Delivery Roadmap</h3>
+                            <div id="deliverySteps"></div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-4">
+                        <section class="detail-card">
+                            <h4 class="fw-bold mb-3"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>Assembly</h4>
+                            <p class="text-muted mb-0">Professional assembly is available at delivery. Most items are ready within 30-60 minutes after unpacking.</p>
+                        </section>
+                    </div>
+                    <div class="col-lg-4">
+                        <section class="detail-card">
+                            <h4 class="fw-bold mb-3"><i class="fas fa-spray-can-sparkles text-primary me-2"></i>Care</h4>
+                            <p id="careText" class="text-muted mb-0"></p>
+                        </section>
+                    </div>
+                    <div class="col-lg-4">
+                        <section class="detail-card">
+                            <h4 class="fw-bold mb-3"><i class="fas fa-award text-primary me-2"></i>Warranty</h4>
+                            <p class="text-muted mb-0">Includes a 1 year warranty for frame, manufacturing defects, and hardware support.</p>
+                        </section>
+                    </div>
+                </div>
+
+                <section class="detail-card mt-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                        <h3 class="fw-bold mb-0">Customer Reviews</h3>
+                        <span id="reviewSummary" class="text-warning fw-bold"></span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded h-100">
+                                <strong>Great comfort</strong>
+                                <p class="text-muted small mb-0 mt-2">The finishing feels premium and delivery was cleanly handled.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded h-100">
+                                <strong>Looks exactly as shown</strong>
+                                <p class="text-muted small mb-0 mt-2">Good packaging, sturdy build, and the size matched the specs.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded h-100">
+                                <strong>Worth the price</strong>
+                                <p class="text-muted small mb-0 mt-2">Support team shared updates at every delivery step.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mt-4">
+                    <h3 class="fw-bold mb-3">Related Products</h3>
+                    <div id="relatedProducts" class="row g-4"></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer bg-dark text-white py-4">
+        <div class="container text-center text-muted">
+            <p class="mb-0">&copy; 2024 FurniCraft. Premium furniture for your home.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/product-data.js"></script>
+    <script src="../js/product-detail.js"></script>
+</body>
+</html>
